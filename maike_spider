@@ -1,0 +1,48 @@
+from selenium import webdriver
+import time
+#设置代理ip
+chromeOptions = webdriver.ChromeOptions()
+chromeOptions.add_argument("--proxy-server=https://202.20.16.82:10152")
+# 一定要注意，=两边不能有空格，不能是这样--proxy-server = http://202.20.16.82:10152
+
+def maike(browser,name,pwd):
+    #测试ip
+    browser.get("http://httpbin.org/ip")
+    print(browser.page_source)
+    
+    browser.get("https://passpt.maike51.com/?refer=shop")
+    #这里通过name选择器获取登录名和密码并把需要set值给放进去
+    browser.find_element_by_name("account").send_keys(name)
+    browser.find_element_by_class_name("item-pwd").send_keys(pwd)
+    #这一步模拟点击登录
+    browser.find_element_by_class_name("btnadpt").click()
+    
+    browser.find_element_by_class_name("icon-bulletin-close").click()#关闭广告
+   
+    browser.find_element_by_class_name("icon-sj").click()#点击数据
+    
+    hrefs=browser.find_element_by_partial_link_text(u"店铺概况")#点击店铺概况
+    hrefs.click()
+    browser.find_element_by_id("export").click()#点击导出
+    time.sleep(6)  
+    
+    hrefs=browser.find_element_by_partial_link_text(u"交易概况")#点击交易概况
+    hrefs.click()    
+    browser.find_element_by_id("export").click()#点击导出
+    time.sleep(6)  
+    
+    hrefs=browser.find_element_by_partial_link_text(u"客户概况")#点击客户概况
+    hrefs.click()
+    browser.find_element_by_id("export").click()#点击导出
+    time.sleep(6)
+   
+    
+if __name__=='__main__':
+    browser = webdriver.Chrome()
+    #browser = webdriver.Chrome(chrome_options = chromeOptions) #用代理ip时启用这句
+    browser.get("http://httpbin.org/ip")
+    print(browser.page_source)
+    maike(browser,"13810020580","cocobella321")#CC卖客星球后台
+    time.sleep(6) 
+    maike(browser,"15910353672","cocobella2017")#OG卖客平台
+    browser.quit()
